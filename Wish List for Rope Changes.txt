@@ -1,0 +1,20 @@
+Wish List for Rope Changes Version 2.0
+
+1. Access a ‘ROPE.ini’ file with the following entries:
+    a) Path name to source file		(SRC=C:\MyCode\payroll.s)
+    b) Name of macro directory		(LIB=C:\MyCode\MacroLib\)
+    c) Path name to card input file	(RDR=C:\MyCode\payroll.in)
+    d) Path name to punch output file	(PCH=C:\MyCode\payroll.pch)
+    e) Path name to tape file		(MT1= C:\MyCode\payroll.mt1
+    f) Path name to tape file		(MT2= C:\MyCode\payroll.mt2
+    g) Path name to tape file		(MT3= C:\MyCode\payroll.mt3
+    h) Path name to tape file		(MT4= C:\MyCode\payroll.mt4
+    i) Path name to tape file		(MT5= C:\MyCode\payroll.mt5
+    j) Path name to tape file		(MT6= C:\MyCode\payroll.mt6
+    k) Memory display ‘from’ and ‘to’ values (MEM=300;1200)
+2. The simulator under ROPE does not keep up with the program when the code has been assembled several times.
+    a. Fix this problem or
+    b. Provide a reset button that will take back to initial state with code showing.
+3.	If we went with the concept that each unique 1401 program resided in its own directory, we could place the ROPE.ini in that directory so that it is set for that program.
+
+

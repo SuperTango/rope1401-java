@@ -1,0 +1,39 @@
+    ROPE version 0.5  September 15, 2007 - Italics from a Jan 14, 2008 e-mail 
+    Hi, Dan.
+
+    There's now a better version 0.5 [of the user interface module only] at http://www.apropos-logic.com/ROPE1401v05.zip.
+
+    (a) is due to the way the simulator seems to want to work. Whenever you start a program, it resets the sense switches to A on and the rest off. Therefore, ROPE doesn't let you set the sense switches until after the program has started. Either put a halt instruction at the beginning or set a breakpoint there.
+
+    In (b), ROPE fills in suggested file names each of which you can change with the Browse button. The reader file is unique in that it must already exist (since it's the input data deck), which is why ROPE won't let you edit the file name directly. To emphasize that you must choose an existing file, ROPE no longer makes a name suggestion. However, it is now a bit smarter about which directory to start in whenever you press Browse.
+
+    Is there something you want ROPE to do for (c)?
+
+    -- Ron
+
+    ROPE seems to run best with Java 1.4.
+
+    In this version of ROPE, the EXEC window has a button labeled "Runtime data ...". Click on it just after you've assembled a program or after killing the simulator. A dialog box will open that allows you to attach the card reader, card punch, and up to 6 tape units. After clicking OK to dismiss the dialog box, you'll need to restart the simulator.
+
+    This user interaction is a bit convoluted due to the way ROPE and the simh 1401 simulator talk to each other. Yes, I can probably improve it if I get around to it.
+
+    From: Dan McInnis [mailto:dan_mcinnis@comcast.net] 
+    Sent: Saturday, September 15, 2007 11:52 AM
+    To: Ronald Mak
+    Cc: Robert Garner; Ed Thelen
+    Subject: Re: ROPE v 0.5 with card punch and tape drives
+
+
+    Hi Ron,
+    Just tested the new ROPE v0.5 with DAP-E.
+    Everything ran fine.  
+    Three notes for inclusion in instructions:
+       a.  You can only set sense switches after the simulator starts.  This means the source program must
+                have a halt instruction at the beginning.  
+       b.  The data input file must be named just as indicated in the check box window.  i.e. "sfn.in".
+       c.  The tape output is wysiwyg so some detection is necessary to test the output.  This is a SIMH thing.
+     
+    I will do some more testing but wanted to let you know about DAP-E test. 
+     
+    Good work,
+    Dan

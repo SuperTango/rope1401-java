@@ -1,0 +1,51 @@
+ CLEAR STORAGE 1     ,008015,022026,030037,044,049,053053N000000N00001026                                         1
+ CLEAR STORAGE 2     L068116,105106,110117B101/I9I#071029C029056B026/B001/0991,001/001117I0?                      2
+ BOOTSTRAP           ,008015,022029,036040,047054,061068,072/061039              ,0010011040                      3
+0                                                                                                         PAGE    1
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  101         ***************************************************************************
+  102         *     SSSSS = CARD SEQUENCE NUMBER          ********** = LABEL
+  103         *     OPER- = OPERATION                     OPERANDS--- = OPERATION
+  104 SS SSS  **********OPER-OPERANDS----------------------------------------------------
+1                          SECOND PROGRAM 80/80 CARD LISTER                                               PAGE    2
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  105                JOB   SECOND PROGRAM 80/80 CARD LISTER
+  106                CTL   6611  *6=16,000C;6=16,000T;1=OBJDECK;,1=MODADD
+  107         *
+  108         RDBUFF EQU   1                   *READ BUFFER   (1-80)                   0001
+  109         PUBUFF EQU   101                 *PUNCH BUFFER  (101-181)                0101
+  110         PRBUFF EQU   201                 *PRINT BUFFER  (201-332)                0201
+  111         *
+  112                ORG   87                                                                 0087
+  113         X1     DCW   000                 *INDEX REGISTER 1                    3  0089                       4
+  114                DC    00                                                       2  0091                       4
+  115         X2     DCW   000                 *INDEX REGISTER 2                    3  0094                       4
+  116                DC    00                                                       2  0096                       4
+  117         X3     DCW   0000                *INDEX REGISTER 3                    4  0100                       4
+  118         *
+  119                ORG   350                 *START JUST ABOVE PRINT BUFFER                 0350
+  120         *
+  121                DCW   @SECOND PROGRAM CARD TO PRINT COPY 2/13/2008@           43  0392                       6
+  122         *
+  123         START  H                         *HALT FOR A GOOD RUNNING START       1  0393  .                    6
+  124                CS    PRBUFF&132          *CLEAR THE PRINT BUFFER 332 TO 3     4  0394  / 333                6
+  125                CS                        *CLEAR THE PRINT BUFFER 299 TO 2     1  0398  /                    6
+  126                SW    RDBUFF,PRBUFF       *SET A WORD MARK AT THE BEGINNIN     7  0399  , 001 201            6
+  127         *                                  *OF THE READ AND PRINT BUFFER
+  128         *
+  129         READ   R                         *READ A CARD                         1  0406  1                    7
+  130                MCW   RDBUFF&79,PRBUFF&79 *MOVE TO PRINT AREA                  7  0407  M 080 280            7
+  131                W                         *PRINT IT                            1  0414  2                    7
+  132                B     DONE,A              *BRANCH IF LAST CARD READ            5  0415  B 424 A              7
+  133                B     READ                *ELSE GO READ ANOTHER CARD           4  0420  B 406                7
+  134         *
+  135         DONE   B     START               *IF YOU LOAD ANOTHER DECK.....       4  0424  B 393                7
+  136                NOP                       *                                    1  0428  N                    7
+  137                END   START                                                             / 393 080
+1                          SECOND PROGRAM 80/80 CARD LISTER                                               PAGE    3
+0SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  
+
+ DONE      424    PRBUFF    201    PUBUFF    101    RDBUFF      1    READ      406    START     393    X1         89   
+ X2         94    X3        100   

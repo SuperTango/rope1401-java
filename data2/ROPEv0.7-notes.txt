@@ -1,0 +1,32 @@
+New features of ROPE v0.7
+-------------------------
+
+The new assembler options of Autocoder v3.1 are supported.
+
+  - In the EDIT window, click the "Assembler options ..." button.
+
+  - In the Assembler Options dialog box:
+
+      - You can select multiple directory paths for the
+        macro library.  Click the "Browse ..." button and
+        hold down the control key as you select directories
+        (or use the shift key to select a range).  The
+        assembler command will include a -I option for
+        each directory.
+
+      - You can now edit the assembler command directly.
+
+There are new timers that indicate elapsed wallclock time,
+elapsed simulator time, and estimated elapsed 1401 time
+while your program is executing.
+
+  - In the EXEC window, click the "Timers ..." button.
+
+  - In the TIMERS window, click the "Set speed" button to
+    set the speed of your host machine.  Then click the "OK" button.
+
+  - The estimated elapsed 1401 time is a VERY rough estimate.
+    It's useful only if you run your program without breakpoints
+    and without single- or auto-stepping.
+
+  - Sorry, the timer values don't update until SIMH releases control.

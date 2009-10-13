@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project name="rope1401" default="compile" basedir=".">
+
+    <property name="rope1401.srcdir" location="src/java"/>
+
+    <target name="init">
+        <tstamp/>
+            <property name="build.debug" value="true"/>
+            <property name="root.dir" location="."/>
+            <property name="build.root" location="${root.dir}/build"/>
+            <property name="build.classdir" location="${build.root}/classes"/>
+            <property name="build.distdir" location="${build.root}/dist"/>
+            <property name="javadoc" location="${build.root}/javadoc"/>
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build.root}"/>
+    </target>
+
+    <target name="clean" depends="init">
+        <delete dir="${build.root}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <mkdir dir="${build.classdir}"/>
+        <javac srcdir="${rope1401.srcdir}" destdir="${build.classdir}" debug="yes">
+        </javac>
+    </target>
+
+    <target name="package" depends="init">
+    </target>
+
+    <target name="dist" depends="compile,package">
+        <!-- Create the distribution directory -->
+        <mkdir dir="${build.distdir}/dist"/>
+
+        <!-- Put everything in ${build.classdir} into the jar file -->
+        <jar jarfile="${build.distdir}/rope1401.jar" basedir="${build.classdir}"
+             manifest="${rope1401.srcdir}/rope1401/manifest"/>
+    </target>
+
+    <target name="run" depends="dist">
+        <java fork="true" jar="${build.distdir}/rope1401.jar"/>
+    </target>
+
+    <target name="javadoc" depends="init">
+        <mkdir dir="${javadoc}"/>
+        <javadoc sourcepath="${rope1401.srcdir}" destdir="${javadoc}" packagenames="rope1401"/>
+    </target>
+</project>

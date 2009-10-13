@@ -1,0 +1,110 @@
+ CLEAR STORAGE 1     ,008015,022026,030037,044,049,053053N000000N00001026                                         1
+ CLEAR STORAGE 2     L068116,105106,110117B101/I9I#071029C029056B026/B001/0991,001/001117I0?                      2
+ BOOTSTRAP           ,008015,022029,036040,047054,061068,072/061039              ,0010011040                      3
+0                                                                                                         PAGE    1
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  101         ***************************************************************************
+  102         *     SSSSS = CARD SEQUENCE NUMBER          ********** = LABEL
+  103         *     OPER- = OPERATION                     OPERANDS--- = OPERATION
+  104         **********OPER-OPERANDS----------------------------------------------------
+1                          EDIT PROGRAM                                                                   PAGE    2
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  105                JOB   EDIT PROGRAM
+  106                CTL   6611  *6=16,000C;6=16,000T;1=OBJDECK;,1=MODADD
+  107         *
+  108         RDBUFF EQU   1                   *READ BUFFER   (1-80)                   0001
+  109         PUBUFF EQU   101                 *PUNCH BUFFER  (101-181)                0101
+  110         PRBUFF EQU   201                 *PRINT BUFFER  (201-332)                0201
+  111         *
+  112                ORG   87                                                                 0087
+  113         X1     DCW   000                 *INDEX REGISTER 1                    3  0089                       4
+  114                DC    00                                                       2  0091                       4
+  115         X2     DCW   000                 *INDEX REGISTER 2                    3  0094                       4
+  116                DC    00                                                       2  0096                       4
+  117         X3     DCW   000                *INDEX REGISTER 3                     3  0099                       4
+  118         *
+  119                ORG   350                                                                0350
+  120         *
+  121                DCW   @THIS IS A VISITOR DEMO JULY 17,2009@                   35  0384                       5
+  122         *         VISITOR PARAMETERS ARE READ FROM A PUNCHED CARD
+  123         *         WITH COMMA SEPARATED FIELDS
+  124         *
+  125         COMMA  DCW   @,@                                                      1  0385                       5
+  126         BLANK  DCW   @ @                                                      1  0386                       5
+  127         NAME   DCW   #20                                                     20  0406                       6
+  128         TOWN   DCW   #20                                                     20  0426                       7
+  129         FRIEND DCW   #20                                                     20  0446                       8
+  130         PET    DCW   #20                                                     20  0466                       9
+  131                ORG   500                                                                0500
+  132         PTR    DCW   @230@                                                    3  0502                      10
+  133                DCW   @234@                                                    3  0505                      10
+  134                DCW   @251@                                                    3  0508                      10
+  135                DCW   @238@                                                    3  0511                      10
+  136         PARM   DCW   #20                  *PLACE HOLDER ACCESSED BY PRINT    20  0531                      10
+  137         COLM   DCW   #3                   *COLUMN NUMBER IN PRINT AREA        3  0534                      10
+  138         ONE    DCW   @001@                                                    3  0537                      10
+  139         TWO    DCW   @002@                                                    3  0540                      11
+  140         THREE  DCW   @003@                                                    3  0543                      11
+  141         *
+  142         START  H                          *STOP HERE FIRST                    1  0544  .                   11
+  143                R                          *READ PARAMETER CARD                1  0545  1                   11
+  144                SW    RDBUFF               *DELIMIT CARD INPUT AREA            4  0546  , 001               11
+  145                MCW   @000@,X1             *INITIALIZE X1 REGISTER             7  0550  M 732 089           11
+  146                MCW   @020@,X2             *INITIALIZE X2 REGISTER             7  0557  M 735 094           11
+  147         CHKIT  BCE   FOUND,001&X1,,       *GO IF COMMA FOUND                  8  0564  B 591 0'1 ,         12
+  148                MA    ONE,X1               *INCREMENT X1                       7  0572  # 537 089           12
+  149                BCE   STORY,X1-1,8         *GO IF END OF CARD                  8  0579  B 620 088 8         12
+  150                B     CHKIT                *TRY AGAIN                          4  0587  B 564               12
+  151         FOUND  SW    002&X1               *DELIMIT FIELD                      4  0591  , 0'2               12
+  152                MCW   000&X1,NAME&X2       *COPY THE FIELD                     7  0595  M 0'0 4!6           12
+  153                MA    @020@,X2             *INCREMENT X2                       7  0602  # 735 094           13
+  154                MA    ONE,X1               *MOVE PAST COMMA                    7  0609  # 537 089           13
+1                          EDIT PROGRAM                                                                   PAGE    3
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  155                B     CHKIT                *GO FOR NEXT FIELD                  4  0616  B 564               13
+  156         *
+  157         *HERE WHEN PARAMETER CARD IS COMPLETELY PROCESSED
+  158         STORY  MCW   @020@,X2             *NEW USE FOR X2                     7  0620  M 735 094           13
+  159                MCW   @000@,X1             *X1 USED FOR COLUMN NUMBER          7  0627  M 732 089           13
+  160                MCW   @000@,X3             *X3 USED FOR PTR TO COL NUM         7  0634  M 732 099           13
+  161                CS    080                                                      4  0641  / 080               14
+  162         L001   R                          *READ STORY CARD(S)                 1  0645  1                   14
+  163                SW    RDBUFF               *DELIMIT CARD INPUT AREA            4  0646  , 001               14
+  164                MCW   NAME&X2,PARM         *PASS PARAMETER TO PRINT SUBRTN     7  0650  M 4!6 531           14
+  165                B     PRINT                *CALL SUBROUTINE                    4  0657  B 685               14
+  166                A     @020@,X2             *BUMP TO NEXT PARAMETER             7  0661  A 735 094           14
+  167                B     DONE,A               *GO IF NO MORE INPUT CARDS          5  0668  B 677 A             14
+  168                B     L001                 *FETCH NEXT INPUT CARD              4  0673  B 645               15
+  169         DONE   NOP   PTR&3,PTR&6                                              7  0677  N 505 508           15
+  170                NOP                                                            1  0684  N                   15
+  171         ***************************************************************************
+  172         *
+  173         * SUBROUTINE TO INSERT TEXT & PARAMETERS INTO THE PRINT AREA
+  174         * UPON ARRIVAL B REG HOLDS NEXT INSTRUCTION IN CALLING ROUTINE
+  175         *
+  176         ***************************************************************************
+  177         PRINT  SBR   LAST&3               *LINKAGE BACK TO MAIN ROUTINE       4  0685  H 729               15
+  178                MCW   080,280              *COPY STORY CARD TO PRINT AREA      7  0689  M 080 280           15
+  179                MCW   PTR&X3,X1            *GET COLUMN NUMBER IN X1 REG        7  0696  M 5?2 089           15
+  180                MCW   PARM,000&X1          *INSERT PARAMETER INTO PRINT AR     7  0703  M 531 0'0           15
+  181                W                                                              1  0710  2                   16
+  182                DC    @S@                  *SUPPRESS SPACING                   1  0711                      16
+  183                W                          *PRINT SECOND IMPRESSION            1  0712  2                   16
+  184                CS    332                                                      4  0713  / 332               16
+  185                CS                                                             1  0717  /                   16
+  186                W                          *DOUBLE SPACE                       1  0718  2                   16
+  187                MA    THREE,X3             *BUMP TO NEXT COLUMN                7  0719  # 543 099           16
+  188         LAST   B     000                  *TO BE FILLED IN BY FIRST INST      4  0726  B 000               16
+                     DCW   @000@                                                    3  0732              LIT     17
+                     DCW   @020@                                                    3  0735              LIT     17
+  189                END   START                                                             / 544 080
+1                          EDIT PROGRAM                                                                   PAGE    4
+0SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  
+
+ BLANK     386    CHKIT     564    COLM      534    COMMA     385    DONE      677    FOUND     591    FRIEND    446   
+ L001      645    LAST      726    NAME      406    ONE       537    PARM      531    PET       466    PRBUFF    201   
+ PRINT     685    PTR       502    PUBUFF    101    RDBUFF      1    START     544    STORY     620    THREE     543   
+ TOWN      426    TWO       540    X1         89    X2         94    X3         99   

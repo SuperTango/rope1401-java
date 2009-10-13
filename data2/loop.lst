@@ -1,0 +1,160 @@
+ CLEAR STORAGE 1     ,008015,022026,030037,044,049,053053N000000N00001026                                         1
+ CLEAR STORAGE 2     L068116,105106,110117B101/I9I#071029C029056B026/B001/0991,001/001117I0?                      2
+ BOOTSTRAP           ,008015,022029,036040,047054,061068,072/061039              ,0010011040                      3
+0                                                                                                         PAGE    1
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  101         ***************************************************************************
+  102         *     SSSSS = CARD SEQUENCE NUMBER          ********** = LABEL
+  103         *     OPER- = OPERATION                     OPERANDS--- = OPERATION
+  104 SS SSS  **********OPER-OPERANDS----------------------------------------------------
+1                          FIRST PROGRAM                                                                  PAGE    2
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  105                JOB   FIRST PROGRAM
+  106                CTL   6611  *6=16,000C;6=16,000T;1=OBJDECK;,1=MODADD
+  107         *
+  108                ORG   87                                                                 0087
+  109         X1     DCW   000                 *INDEX REGISTER 1                    3  0089                       4
+  110                DC    00                                                       2  0091                       4
+  111         X2     DCW   000                 *INDEX REGISTER 2                    3  0094                       4
+  112                DC    00                                                       2  0096                       4
+  113         X3     DCW   0000                *INDEX REGISTER 3                    4  0100                       4
+  114         *
+  115                ORG   350                                                                0350
+  116         *
+  117                DCW   @LOOP PROGRAM@ 07-11-2009@                              24  0373                       5
+  118         COUNT  DCW   0000                *A PLACE TO COUNT LOOPS              4  0377                       5
+  119         MYCHAR DCW   @S@                                                      1  0378                       5
+  120         TAG    DCW   0000                                                     4  0382                       5
+  121         *
+  122         START  H                                                              1  0383  .                    5
+  123         *
+  124         * HOW TO DO A SIMPLE LOOP OF 10 LOOPS
+  125         * 100 WORKS THE SAME WAY WITH BCE  LOOP, COUNT-2
+  126         * 132 CAN WORK THE SAME WAY IF YOU INITILIZE COUNTER WITH 78
+  127         * AND LOOK FOR A 2 IN COUNT-2
+  128         *
+  129         ************************************************************
+  130         *
+  131                ZA    @0@,COUNT           *INITIALIZE THE COUNTER              7  0384  ? 696 377            6
+  132         LOOP   NOP                       *WORK                                1  0391  N                    6
+  133                NOP                       *WORK                                1  0392  N                    6
+  134                NOP                       *WORK                                1  0393  N                    6
+  135                A     @1@,COUNT           *ADD 1 TO COUNT                      7  0394  A 697 377            6
+  136                BCE   LOOP,COUNT-1,0      *HAVE WE DONE 10 LOOPS?              8  0401  B 391 376 0          6
+  137         *
+  138         ************************************************************
+  139         *
+  140         * HOW TO LOOP USING NUMERIC OVERFLOW
+  141         *
+  142         ************************************************************
+  143         *
+  144                ZA    @9990@,COUNT        *INITIALIZE THE COUNTER              7  0409  ? 701 377            6
+  145         LOOP2  NOP                       *WORK                                1  0416  N                    7
+  146                NOP                       *WORK                                1  0417  N                    7
+  147                NOP                       *WORK                                1  0418  N                    7
+  148                A     @1@,COUNT           *ADD 1 TO COUNT                      7  0419  A 697 377            7
+  149                BAV   EXIT2               *HAVE WE DONE 10 LOOPS?              5  0426  B 435 Z              7
+  150                B     LOOP2               *DO ANOTHER LOOP                     4  0431  B 416                7
+  151         EXIT2  NOP                       *DO THE NEXT THING                   1  0435  N                    7
+  152         *
+  153         ************************************************************
+  154         *
+1                          FIRST PROGRAM                                                                  PAGE    3
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  155         * HOW TO LOOP USING CONVENTIAL CODE
+  156         *
+  157         ************************************************************
+  158         *
+  159                ZA    @0@,COUNT           *INITIALIZE THE COUNTER              7  0436  ? 696 377            8
+  160         LOOP3  NOP                       *WORK                                1  0443  N                    8
+  161                NOP                       *WORK                                1  0444  N                    8
+  162                NOP                       *WORK                                1  0445  N                    8
+  163                A     @1@,COUNT           *ADD 1 TO COUNT                      7  0446  A 697 377            8
+  164                MZ    COUNT-1,COUNT       *CLEAR THE UNITS ZONE BITS           7  0453  Y 376 377            8
+  165                C     @0010@,COUNT        *SEE IF COUNT = 10                   7  0460  C 705 377            8
+  166                BE    LOOP3               *NOT THERE YET                       5  0467  B 443 S              9
+  167                NOP                       *GO ON TO NEXT FUNCTION              1  0472  N                    9
+  168         *
+  169         ************************************************************
+  170         *
+  171         * ANOTHER WAY TO BRANCH ON OVERFLOW
+  172         *
+  173         ************************************************************
+  174         *
+  175         LOOP4  MCW   -9999,TAG                                                7  0473  M 709 382            9
+  176                S     @1@,TAG            *THE OVERFLOW FLAG WILL BE SET        7  0480  S 697 382            9
+  177                BAV   EXIT5              *GO IF OVERFLOW                       5  0487  B 496 Z              9
+  178                B     LOOP4              *GO IF NOT OVERFLOW                   4  0492  B 473                9
+  179         EXIT5  NOP                                                            1  0496  N                    9
+  180         ************************************************************
+  181         *
+  182         * HOW TO SEARCH FOR A CHARACTER IN THE CARD BUFFER
+  183         *
+  184         ************************************************************
+  185         *
+  186                CS    080                 *CLEAR THE CARD BUFFER               4  0497  / 080               10
+  187                MCW   MYCHAR,045           *PUT IT OUT THERE                   7  0501  M 378 045           10
+  188                MCW   @000@,X1            *INITIALIZE THE X1 REGISTER          7  0508  M 712 089           10
+  189                MCW   MYCHAR,CHKIT&7       *MODIFY THE INSTRUCTION             7  0515  M 378 529           10
+  190         CHKIT  BCE   FOUND,001&X1,?      *DID WE FIND IT?                     8  0522  B 549 0'1 ?         10
+  191                MA    @001@,X1            *INCEREMENT THE X1                   7  0530  # 715 089           11
+  192                BCE   NOMAT,X1-1,8        *DID WE GET TO 80?                   8  0537  B 637 088 8         11
+  193                B     CHKIT               *TRY AGAIN                           4  0545  B 522               11
+  194         *
+  195         FOUND  CS    332                 *CLEAR PRINT BUFFER                  4  0549  / 332               11
+  196                CS                        *CLEAR PRINT BUFFER                  1  0553  /                   11
+  197                MCS   X1,FCOLM            *MOVE X1 AND CLEAR LEADING ZERO      7  0554  Z 089 636           11
+  198                SW    FCOLM,-2            *MCS REMOVES WORDMARK                7  0561  , 636 716           11
+  199                MCW   MYCHAR,FCHAR        *MOVE THE CHARACTER INTO THE LIN     7  0568  M 378 620           12
+  200         *
+  201                MLC   FCOLM,240           *MOVE FIRST FIELD                    7  0575  M 636 240           12
+  202                MLC   FMEND               *MOVE SECOND FIELD                   4  0582  M 633               12
+  203                MLC   FCHAR               *MOVE THIRD FIELD                    4  0586  M 620               12
+  204                MLC   FTOP                *MOVE FOURTH FIELD                   4  0590  M 619               12
+1                          FIRST PROGRAM                                                                  PAGE    4
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  205                W                         *PRINT                               1  0594  2                   12
+  206                H     START               *START OVER AGAIN                    4  0595  . 383               12
+  207         *******************************************************
+  208         *DEFINE THE PRINT LINE SO IT CAN BE MOVED TO THE PRINT
+  209         *BUFFER VIA CHAINED MCW
+  210         *******************************************************
+  211         FTOP   DCW   @FOUND THE CHARACTER (@                                 21  0619                      13
+  212         FCHAR  DCW   @ @                                                      1  0620                      13
+  213         FMEND  DCW   @) AT COLUMN  @                                         13  0633                      13
+  214         FCOLM  DCW   000                                                      3  0636                      13
+  215         *
+  216         NOMAT  MCW   MYCHAR,NFCHAR       *MOVE CHARACTER INTO MESSAGE         7  0637  M 378 693           14
+  217                MCW   NFTAG,235           *MOVE FIRST FIELD                    7  0644  M 695 235           14
+  218                MCW   NFCHAR              *MOVE SECOND FIELD                   4  0651  M 693               14
+  219                MCW   NFTOP               *MOVE THIRD FIELD                    4  0655  M 692               14
+  220                W                         *PRINT                               1  0659  2                   14
+  221                H     START               *START OVER AGAIN                    4  0660  . 383               14
+  222                NOP                       *TERMINATION FOR HALT INSTRUCTIO     1  0664  N                   14
+  223         *******************************************************
+  224         *DEFINE THE PRINT LINE SO IT CAN BE MOVED TO THE PRINT
+  225         *BUFFER VIA CHAINED MCW
+  226         *******************************************************
+  227         NFTOP  DCW   @DID NOT FIND THE CHARACTER (@                          28  0692                      15
+  228         NFCHAR DCW   @ @                                                      1  0693                      15
+  229         NFTAG  DCW   @) @                                                     2  0695                      15
+                     DCW   @0@                                                      1  0696              LIT     15
+                     DCW   @1@                                                      1  0697              LIT     15
+                     DCW   @9990@                                                   4  0701              LIT     15
+                     DCW   @0010@                                                   4  0705              LIT     16
+                     DCW   -9999                                                    4  0709              LIT     16
+                     DCW   @000@                                                    3  0712              LIT     16
+                     DCW   @001@                                                    3  0715              LIT     16
+                     DCW   -2                                                       1  0716              LIT     16
+  230                END   START                                                             / 383 080
+1                          FIRST PROGRAM                                                                  PAGE    5
+0SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  
+
+ CHKIT     522    COUNT     377    EXIT2     435    EXIT5     496    FCHAR     620    FCOLM     636    FMEND     633   
+ FOUND     549    FTOP      619    LOOP      391    LOOP2     416    LOOP3     443    LOOP4     473    MYCHAR    378   
+ NFCHAR    693    NFTAG     695    NFTOP     692    NOMAT     637    START     383    TAG       382    X1         89   
+ X2         94    X3        100   

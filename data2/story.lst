@@ -1,0 +1,193 @@
+ CLEAR STORAGE 1     ,008015,022026,030037,044,049,053053N000000N00001026                                         1
+ CLEAR STORAGE 2     L068116,105106,110117B101/I9I#071029C029056B026/B001/0991,001/001117I0?                      2
+ BOOTSTRAP           ,008015,022029,036040,047054,061068,072/061039              ,0010011040                      3
+0                          EDIT PROGRAM                                                                   PAGE    1
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  101                JOB   EDIT PROGRAM
+  102                INCLD PREAMBLE.S                                                                    MACRO
+  103         ***************************************************************************
+  104         *     SSSSS = CARD SEQUENCE NUMBER          ********** = LABEL
+  105         *     OPER- = OPERATION                     OPERANDS--- = OPERATION
+  106 SS SSS  **********OPER-OPERANDS----------------------------------------------------
+  107                CTL   6611  *6=16,000C;6=16,000T;1=OBJDECK;,1=MODADD                                GEN
+  108         *
+  109         RDBUFF EQU   1                   *READ BUFFER   (1-80)                   0001              GEN
+  110         PUBUFF EQU   101                 *PUNCH BUFFER  (101-181)                0101              GEN
+  111         PRBUFF EQU   201                 *PRINT BUFFER  (201-332)                0201              GEN
+  112         *
+  113                ORG   87                                                                 0087       GEN
+  114         X1     DCW   000                 *INDEX REGISTER 1                    3  0089              GEN      4
+  115                DC    00                                                       2  0091              GEN      4
+  116         X2     DCW   000                 *INDEX REGISTER 2                    3  0094              GEN      4
+  117                DC    00                                                       2  0096              GEN      4
+  118         X3     DCW   000                 *INDEX REGISTER 3                    3  0099              GEN      4
+  119         *
+  120         *
+  121                DCW   @THIS IS A PERSONALIZED STORY 12 AUGUST 2009@           43  0142                       6
+  122         *         VISITOR PARAMETERS ARE READ FROM A PUNCHED CARD
+  123         *         WITH COMMA SEPARATED FIELDS
+  124         *
+  125                ORG   400                                                                0400
+  126         M1     DSA   15999                *DECREMENT BY ONE                   3  0402  I9I                  7
+  127         M2     DSA   15998                *DECREMENT BY TWO                   3  0405  I9H                  7
+  128         M3     DSA   15997                *DECREMENT BY THREE                 3  0408  I9G                  7
+  129         COMMA  DCW   @,@                                                      1  0409                       7
+  130         BLANK  DCW   @ @                                                      1  0410                       7
+  131         NAME   DC    #16                                                     16  0426                       7
+  132                DC    #16                                                     16  0442                       8
+  133                DC    #16                                                     16  0458                       8
+  134                DC    #16                                                     16  0474                       9
+  135                DC    #16                                                     16  0490                       9
+  136         LENGTH DCW   #3                                                       3  0493                       9
+  137                DCW   #3                                                       3  0496                       9
+  138                DCW   #3                                                       3  0499                      10
+  139                DCW   #3                                                       3  0502                      10
+  140                DCW   #3                                                       3  0505                      10
+  141         NICK   DCW   #1                   *PARM NUMBER FOLLOWS '&'            1  0506                      10
+  142         SKIP   DCW   #1                   *ONE MEANS '&  ON THIS LINE         1  0507                      10
+  143         ZERO   DCW   @000@                                                    3  0510                      10
+  144         ONE    DCW   @001@                                                    3  0513                      10
+  145         TWO    DCW   @002@                                                    3  0516                      11
+  146         THREE  DCW   @003@                                                    3  0519                      11
+  147         SIX    DCW   @006@                                                    3  0522                      11
+1                          EDIT PROGRAM                                                                   PAGE    2
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  148         SIXTN  DCW   @016@                                                    3  0525                      11
+  149         EIGHTY DCW   @080@                                                    3  0528                      11
+  150         MARK   DCW   @999@                *INDEX VALUE HOLDER                 3  0531                      11
+  151         CHARS  DCW   #3                   *COUNT CHARACTERS IN PARM           3  0534                      11
+  152         POS    DCW   @080@                *COLUMN NUMBER OF LAST CHAR         3  0537                      12
+  153         *
+  154         START  H                          *STOP HERE FIRST                    1  0538  .                   12
+  155         **************************************************************************
+  156         *
+  157         *PROCESS THE HEADER CARD OF PERSONAL NAMES
+  158         *STORE THE NAME AND THE LENGTH OF THE NAME
+  159         *
+  160         **************************************************************************
+  161                R                          *READ PARAMETER CARD                1  0539  1                   12
+  162                SW    RDBUFF               *DELIMIT CARD INPUT AREA            4  0540  , 001               12
+  163                MCW   @000@,X1             *INITIALIZE X1 REGISTER             7  0544  M '35 089           12
+  164                MCW   SIXTN,X2             *INITIALIZE X2 REGISTER             7  0551  M 525 094           12
+  165                MCW   @000@,X3                                                 7  0558  M '35 099           12
+  166                MCW   @000@,CHARS                                              7  0565  M '35 534           13
+  167         CHKIT  BCE   FOUND,001&X1,,       *GO IF COMMA FOUND                  8  0572  B 606 0'1 ,         13
+  168                MA    ONE,X1               *INCREMENT X1                       7  0580  # 513 089           13
+  169                MA    ONE,CHARS            *COUNT LENGTH OF PARM               7  0587  # 513 534           13
+  170                BCE   STORY,X1-1,8         *GO IF COLUMN 80                    8  0594  B 663 088 8         13
+  171                B     CHKIT                *TRY AGAIN                          4  0602  B 572               14
+  172         FOUND  SW    002&X1               *DELIMIT FIELD                      4  0606  , 0'2               14
+  173                LCA   000&X1,NAME&X2       *COPY THE PARM TO STORAGE           7  0610  L 0'0 4K6           14
+  174                MA    M2,CHARS             *ADJUST FOR PRINT                   7  0617  # 405 534           14
+  175                MCW   CHARS,LENGTH&X3      *SAVE THE LENGTH COUNT              7  0624  M 534 4I3           14
+  176                MCW   @000@,CHARS          *RESET LENGTH COUNT                 7  0631  M '35 534           14
+  177                MA    SIXTN,X2             *BUMP TO NEXT PARM STORAGE          7  0638  # 525 094           15
+  178                MA    THREE,X3             *BUMP TO NEXT LENGTH COUNT          7  0645  # 519 099           15
+  179                MA    ONE,X1               *MOVE PAST COMMA                    7  0652  # 513 089           15
+  180                B     CHKIT                *GO FOR NEXT FIELD                  4  0659  B 572               15
+  181         **************************************************************************
+  182         *
+  183         *READ STORY CARDS
+  184         *
+  185         **************************************************************************
+  186         STORY  MCW   SIXTN,X2             *USE X2 TO ADVANCE THRU PARMS       7  0663  M 525 094           15
+  187                MCW   ZERO,X1              *X1 USED FOR COLUMN NUMBER          7  0670  M 510 089           15
+  188                MCW   ZERO,X3              *X3 USED FOR PTR TO COL NUM         7  0677  M 510 099           16
+  189         L001   CS    080                  *CLEAR CARD INPUT                   4  0684  / 080               16
+  190                CS    PRBUFF&131                                               4  0688  / 332               16
+  191                CS                         *CLEAR PRINT BUFFER                 1  0692  /                   16
+  192                MCW   @0@,SKIP             *CLEAR THE BIT                      7  0693  M '36 507           16
+  193                R                          *READ STORY CARD(S)                 1  0700  1                   16
+  194                SW    RDBUFF               *DELIMIT CARD INPUT AREA            4  0701  , 001               16
+  195                B     PRINT                *CALL SUBROUTINE                    4  0705  B 735               17
+  196                BCE   L004,SKIP,1          *GO IF '&' THIS LINE                8  0709  B 725 507 1         17
+  197                MCW   RDBUFF&80,PRBUFF&80  *COPY ENTIRE LINE                   7  0717  M 081 281           17
+1                          EDIT PROGRAM                                                                   PAGE    3
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  198                W                          *PRINT IT                           1  0724  2                   17
+  199         L004   B     DONE,A               *GO IF NO MORE STORY CARDS          5  0725  B 734 A             17
+  200                B     L001                 *FETCH NEXT STORY CARD              4  0730  B 684               17
+  201         DONE   NOP                                                            1  0734  N                   17
+  202         *
+  203         ***************************************************************************
+  204         *
+  205         * SUBROUTINE TO SCAN INPUT FOR PERSONAL INSERT
+  206         * UPON ARRIVAL B REG HOLDS NEXT INSTRUCTION IN CALLING ROUTINE
+  207         *
+  208         ***************************************************************************
+  209         PRINT  SBR   LAST&3              *LINKAGE BACK TO CALLING ROUTINE     4  0735  H 980               18
+  210                CS    PRBUFF&80           *CLEAR WORK BUFFER                   4  0739  / 281               18
+  211                MCW   ZERO,X1             *USE X1 TO ADVANCE THRU CARD IMG     7  0743  M 510 089           18
+  212         L002   C     @080@,X1            *IS IT LAST COLUMN OF STORY CARD     7  0750  C '39 089           18
+  213                B     LAST,S              *GO IF NO MORE COLUMNS               5  0757  B 977 S             18
+  214                MA    ONE,X1              *BUMP TO NEXT CHAR                   7  0762  # 513 089           18
+  215                BCE   INSERT,RDBUFF&X1,&  *INSPECT CHAR FOR &                  8  0769  B 781 0'1 &         19
+  216                B     L002                *GO IF NOT '&'                       4  0777  B 750               19
+  217         INSERT CS    PRBUFF&132                                               4  0781  / 333               19
+  218                CS                                                             1  0785  /                   19
+  219                MCW   SIXTN,X2            *RESET TO PARM 1                     7  0786  M 525 094           19
+  220                MCW   ZERO,X3             *RESET TO LENGTH 1                   7  0793  M 510 099           19
+  221                B     MEASUR              *DETERMINE COLUMN OF LAST CHAR       4  0800  B 981               19
+  222                MCW   ZERO,X3                                                  7  0804  M 510 099           20
+  223                MCW   X1,MARK             *SAVE INDEX                          7  0811  M 089 531           20
+  224                MA    ONE,X1              *ADVANCE TO PARM NUMBER              7  0818  # 513 089           20
+  225                MCW   RDBUFF&X1,NICK      *PICK UP PARM NUMBER                 7  0825  M 0'1 506           20
+  226                MCW   BLANK,RDBUFF&X1     *ERASE PARM NUMBER                   7  0832  M 410 0'1           20
+  227         L005   BCE   L006,NICK,1         *SELECT PARM                         8  0839  B 872 506 1         21
+  228                MA    SIXTN,X2            *ADVANCE TO NEXT PARM                7  0847  # 525 094           21
+  229                MA    THREE,X3            *ADVANCE TO NEXT LENGTH              7  0854  # 519 099           21
+  230                MA    M1,NICK                                                  7  0861  # 402 506           21
+  231                B     L005                                                     4  0868  B 839               21
+  232         L006   MA    LENGTH&X3,X1        *RIGHT ADJUST INSERT                 7  0872  # 4I3 089           22
+  233                MCW   NAME&X2,PRBUFF&X1   *INSERT PERS PARAMETER               7  0879  M 4K6 2'1           22
+  234                W                         *PRINT AND...                        1  0886  2                   22
+  235                DC    @S@                 *...SPACE SUPPRESS                   1  0887                      22
+  236                MCW   MARK,X1             *PICK UP INDEX                       7  0888  M 531 089           22
+  237                MA    M1,X1               *BACKUP ONE CHAR                     7  0895  # 402 089           22
+  238                MCW   RDBUFF&X1,PRBUFF&X1 *COPY STORY LINE LEFT PART           7  0902  M 0'1 2'1           22
+  239                MA    ONE,X1              *POINT TO '&'                        7  0909  # 513 089           23
+  240                MCW   BLANK,RDBUFF&X1     *ERASE '&'                           7  0916  M 410 0'1           23
+  241                MA    TWO,X1                                                   7  0923  # 516 089           23
+  242                SW    RDBUFF&X1           *SET LIMIT ON RIGHT SIDE TRANSFE     4  0930  , 0'1               23
+  243                MCW   POS,X2                                                   7  0934  M 537 094           23
+  244                MCW   POS,X1                                                   7  0941  M 537 089           23
+  245                MA    LENGTH&X3,X1                                             7  0948  # 4I3 089           24
+  246                MA    ONE,X1                                                   7  0955  # 513 089           24
+  247                MCW   RDBUFF&X2,PRBUFF&X1 *COPY STORY LINE PART RIGHT PART     7  0962  M 0!1 2'1           24
+1                          EDIT PROGRAM                                                                   PAGE    4
+0 SEQ PG LIN  LABEL  OP    OPERANDS                                            SFX CT  LOCN  INSTRUCTION TYPE  CARD
+
+  248                W                         *PRINT PERSONALIZED LINE             1  0969  2                   24
+  249                MCW   ONE,SKIP            *THIS LINE CONTAINS '&'              7  0970  M 513 507           24
+  250         LAST   B     000                 *TO BE FILLED IN BY FIRST INST (     4  0977  B 000               24
+  251         *                                  *RETURN TO CALLER
+  252         ***************************************************************************
+  253         *
+  254         *SUBROUTINE TO DETERMINE POSITION OF LAST CHARACTER ON THE INPUT LINE
+  255         *
+  256         ***************************************************************************
+  257         MEASUR SBR   EXIT&3              *INKAGE  BACK TO CALLING ROUTINE     4  0981  H '32               24
+  258                MCW   EIGHTY,X3            *BEGIN AT LAST COLUMN               7  0985  M 528 099           25
+  259         L009   BCE   L008,RDBUFF&X3,     *TEST FOR BLANK                      8  0992  B '18 0?1           25
+  260                MA    ONE,X3              *CORRECTION                          7  1000  # 513 099           25
+  261                MCW   X3,POS              *RETURN VALUE                        7  1007  M 099 537           25
+  262                B     EXIT                *HERE IF LAST CHAR FOUND             4  1014  B '29               25
+  263         L008   MA    M1,X3               *BACK ONE COLUMN                     7  1018  # 402 099           26
+  264                B     L009                                                     4  1025  B 992               26
+  265         EXIT   B     000                 *TO BE FILLED IN BY FIRST INST (     4  1029  B 000               26
+                     DCW   @000@                                                    3  1035              LIT     26
+                     DCW   @0@                                                      1  1036              LIT     26
+                     DCW   @080@                                                    3  1039              LIT     26
+  266                END   START                                                             / 538 080
+1                          EDIT PROGRAM                                                                   PAGE    5
+0SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  SYMBOL  ADDRESS  
+
+ BLANK     410    CHARS     534    CHKIT     572    COMMA     409    DONE      734    EIGHTY    528    EXIT     1029   
+ FOUND     606    INSERT    781    L001      684    L002      750    L004      725    L005      839    L006      872   
+ L008     1018    L009      992    LAST      977    LENGTH    493    M1        402    M2        405    M3        408   
+ MARK      531    MEASUR    981    NAME      426    NICK      506    ONE       513    POS       537    PRBUFF    201   
+ PRINT     735    PUBUFF    101    RDBUFF      1    SIX       522    SIXTN     525    SKIP      507    START     538   
+ STORY     663    THREE     519    TWO       516    X1         89    X2         94    X3         99    ZERO      510   
