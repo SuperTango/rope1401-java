@@ -25,8 +25,8 @@ class Simulator
     {
         try {
             cleanup();
-
-            process = Runtime.getRuntime().exec("./i1401r");
+            String command = RopeConfig.getConfig().getConfigValue ( "simulator.path" );
+            process = Runtime.getRuntime().exec ( command );
             isActive = true;
 
             stdin = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));

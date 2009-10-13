@@ -25,9 +25,10 @@ class Assembler
 
     static void version()
     {
-        String command = "./autocoder -V";
+        String command = RopeConfig.getConfig().getConfigValue ( "autocoder.path" ) + " -V";
 
         try {
+            System.out.println ( "COMMAND: " + command );
             Process process = Runtime.getRuntime().exec(command);
             stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
         }

@@ -41,14 +41,14 @@ public class RopeFrame extends JFrame
             this.validate();
         }
 
-/*
+
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
-*/
+
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension frameSize = new Dimension(screenSize.width - 25,
@@ -84,6 +84,7 @@ public class RopeFrame extends JFrame
                                             printoutSize.getHeight()));
         desktop.add(printoutFrame);
         printoutFrame.setVisible(false);
+//        execFrame.setVisible ( true );
     }
 
     void showExecWindow(String baseName)
