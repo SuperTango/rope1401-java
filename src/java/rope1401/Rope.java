@@ -2,6 +2,7 @@ package rope1401;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -26,11 +27,23 @@ public class Rope
 
     public static void main(String[] args)
     {
-        try {
-            RopeConfig rc = RopeConfig.getConfig ( args[0] );
-        } catch ( IOException e ) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if ( args.length == 0 ) {
+            System.out.println ( "no initialization file passed, continuing without it." );
+        } else if ( args.length == 1 ) {
+            try {
+                File f = new File ( args[0] );
+                if ( ! f.exists() ) {
+                    System.out.println ( "The initalizationn file passed: '" + args[0] + "' does not exist. Exiting." );
+                    System.exit ( 1 );
+                }
+                RopeConfig.initConfig ( args[0] );
+            } catch ( IOException e ) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println ( "Sorry, " + args.length + " parameters were passed. only zero or one parameters are allowed.  Exiting." );
+            System.exit ( 1 );
         }
         new Rope();
     }

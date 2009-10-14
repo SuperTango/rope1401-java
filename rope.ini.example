@@ -1,6 +1,36 @@
+    #
+    # autocoder.binary.path 
+    #   the full path to the autocoder (autocoder) binary.
+    #   This is not required, however it is suggested because otherwise,
+    #   the current directory will be used for the simulator path (and that
+    #   may not be what you're looking for).
+    #
 autocoder.binary.path=/home/altitude/rope1401/binaries/autocoder
+
+    #
+    # simulator.binary.path 
+    #   the full path to the simulator (i1401r) binary.
+    #   This is not required, however it is suggested because otherwise,
+    #   the current directory will be used for the simulator path (and that
+    #   may not be what you're looking for).
 simulator.binary.path=/home/altitude/rope1401/data2/i1401r
+
+    #
+    # autocoder.source
+    #   The source file that the autocoder will assemble.
+    #   This is not a required parameter, if it is not provided, the
+    #   GUI can be used to choose a file.
+    #
 autocoder.source=/home/altitude/rope1401/a/story.s
+
+    #
+    # autocoder.macrodirs
+    #   A semicolon (;) separated list of directories that the autocoder
+    #   will use as macro directories.  If only one directory is required,
+    #   simply list it with no semicolons.  
+    #   This is not a required parameter, if it is not provided, the
+    #   GUI can be used to choose a macro directory or set of directories.
+    #
 autocoder.macrodirs=/home/altitude/rope1401/b
 
 

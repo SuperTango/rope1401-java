@@ -28,7 +28,7 @@ class Assembler
         String command = RopeConfig.getConfig().getConfigValue ( "autocoder.binary.path" ) + " -V";
 
         try {
-            System.out.println ( "COMMAND: " + command );
+//            System.out.println ( "COMMAND: " + command );
             Process process = Runtime.getRuntime().exec(command);
             stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
         }

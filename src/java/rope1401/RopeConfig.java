@@ -12,6 +12,14 @@ public class RopeConfig {
     String m_autocoderSrcPath = null;
     String m_autocoderMacroPath = null;
     Properties m_properties = null;
+    Properties m_defaultProperties = null;
+ 
+    RopeConfig() {
+        m_defaultProperties = new Properties();
+        m_defaultProperties.setProperty ( "autocoder.binary.path", "./autocoder" );
+        m_defaultProperties.setProperty ( "simulator.binary.path", "./i1401r" );
+        m_properties = new Properties ( m_defaultProperties );
+    }    
     
     public static RopeConfig getConfig() {
         if ( s_config == null ) {
@@ -20,24 +28,17 @@ public class RopeConfig {
         return s_config;
     }
     
-    public static RopeConfig getConfig ( String ropeConfigPath ) throws IOException {
+    public static void initConfig ( String ropeConfigPath ) throws IOException {
         s_config = new RopeConfig();
         s_config.load ( ropeConfigPath );
-        return s_config;
     }
     
-    RopeConfig() {
-    }
     
-    void load ( String path ) throws IOException {
-        System.out.println ( "Loading file: " + path );
-        Properties defaultProperties = new Properties();
-        defaultProperties.setProperty ( "autocoder.binary.path", "./autocoder" );
-        defaultProperties.setProperty ( "simulator.binary.path", "./i1401r" );
-        m_properties = new Properties ( defaultProperties );
+    void load ( String path ) throws IOException {       
+        System.out.println ( "Loading config file: " + path );
         m_properties.load ( new FileInputStream ( path ) );
-        m_properties.storeToXML ( System.out, "foo" );
-        m_properties.store ( System.out, "comment" );
+//        m_properties.storeToXML ( System.out, "foo" );
+//        m_properties.store ( System.out, "comment" );
     }
     
     public String getConfigValue ( String key ) {
