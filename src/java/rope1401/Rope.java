@@ -28,8 +28,6 @@ public class Rope
     {
         try {
             RopeConfig rc = RopeConfig.getConfig ( args[0] );
-            System.out.println ( rc.getConfigValue ( "autocoder.path" ) );
-            System.out.println ( rc );
         } catch ( IOException e ) {
             // TODO Auto-generated catch block
             e.printStackTrace();

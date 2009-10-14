@@ -25,7 +25,7 @@ class Assembler
 
     static void version()
     {
-        String command = RopeConfig.getConfig().getConfigValue ( "autocoder.path" ) + " -V";
+        String command = RopeConfig.getConfig().getConfigValue ( "autocoder.binary.path" ) + " -V";
 
         try {
             System.out.println ( "COMMAND: " + command );

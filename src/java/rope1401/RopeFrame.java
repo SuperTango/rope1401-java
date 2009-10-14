@@ -1,6 +1,7 @@
 package rope1401;
 
 import java.util.*;
+import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -85,6 +86,18 @@ public class RopeFrame extends JFrame
         desktop.add(printoutFrame);
         printoutFrame.setVisible(false);
 //        execFrame.setVisible ( true );
+        String srcFile = RopeConfig.getConfig ().getConfigValue ( "autocoder.source" );
+        String macroDirs = RopeConfig.getConfig().getConfigValue ( "autocoder.macrodirs" );
+        if ( srcFile != null ) {
+            if ( macroDirs != null ) {
+                AssemblerOptions.macroPath = macroDirs;
+                AssemblerOptions.macro = true;
+            }
+            File file = new File ( srcFile );
+            if ( file.exists() ) {
+                editFrame.setSourceFile ( file );
+            }
+        }
     }
 
     void showExecWindow(String baseName)

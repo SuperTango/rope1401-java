@@ -250,6 +250,10 @@ public class EditFrame
                                     "Assembly files (*.a, *.asm, *.aut, *.s)"));
         File file = chooser.choose(fileText, this);
 
+        setSourceFile ( file );
+    }
+
+    public void setSourceFile ( File file ) {
         if (file != null) {
             BufferedReader sourceFile = null;
 

@@ -32,8 +32,8 @@ public class RopeConfig {
     void load ( String path ) throws IOException {
         System.out.println ( "Loading file: " + path );
         Properties defaultProperties = new Properties();
-        defaultProperties.setProperty ( "autocoder.path", "./autocoder" );
-        defaultProperties.setProperty ( "simulator.path", "./i1401r" );
+        defaultProperties.setProperty ( "autocoder.binary.path", "./autocoder" );
+        defaultProperties.setProperty ( "simulator.binary.path", "./i1401r" );
         m_properties = new Properties ( defaultProperties );
         m_properties.load ( new FileInputStream ( path ) );
         m_properties.storeToXML ( System.out, "foo" );

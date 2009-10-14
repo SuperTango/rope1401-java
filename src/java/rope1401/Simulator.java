@@ -25,7 +25,7 @@ class Simulator
     {
         try {
             cleanup();
-            String command = RopeConfig.getConfig().getConfigValue ( "simulator.path" );
+            String command = RopeConfig.getConfig().getConfigValue ( "simulator.binary.path" );
             process = Runtime.getRuntime().exec ( command );
             isActive = true;
 

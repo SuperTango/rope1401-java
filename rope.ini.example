@@ -1,0 +1,6 @@
+autocoder.binary.path=/home/altitude/rope1401/binaries/autocoder
+simulator.binary.path=/home/altitude/rope1401/data2/i1401r
+autocoder.source=/home/altitude/rope1401/a/story.s
+autocoder.macrodirs=/home/altitude/rope1401/b
+
+

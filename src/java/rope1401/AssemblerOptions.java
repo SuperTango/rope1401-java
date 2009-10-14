@@ -28,7 +28,7 @@ class AssemblerOptions
     static final String ENCODING_H     = "H";
     static final String ENCODING_PRINT = "?";
 
-    static String assemblerPath = RopeConfig.getConfig().getConfigValue ( "autocoder.path" );
+    static String assemblerPath = RopeConfig.getConfig().getConfigValue ( "autocoder.binary.path" );
     static String encodingChoice = ENCODING_SIMH;
     static String sourcePath;
     static String listingPath;
