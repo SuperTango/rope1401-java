@@ -17,9 +17,6 @@ import javax.swing.*;
 
 public class RopeFrame extends JFrame
 {
-    private static final String TITLE =
-        "ROPE/1401 by Ronald Mak (Version 0.8 Beta)";
-
     private JDesktopPane desktop = new JDesktopPane();
     private EditFrame editFrame;
     private ExecFrame execFrame;
@@ -56,6 +53,15 @@ public class RopeFrame extends JFrame
                                             screenSize.height - 50);
         this.setSize(frameSize);
         this.setLocation((screenSize.width - frameSize.width) / 2, 10);
+
+        BufferedReader versionReader = new BufferedReader ( new InputStreamReader ( RopeFrame.class.getResourceAsStream ( "version" ) ) );
+        String version;
+        try { 
+            version = "-" + versionReader.readLine();
+        } catch ( IOException e ) {
+            version = "";
+        }
+        String TITLE = "ROPE/1401 by Ronald Mak (Version 0.9" + version + ")";
 
         this.setTitle(TITLE);
         this.setVisible(true);
