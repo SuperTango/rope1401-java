@@ -21,8 +21,8 @@
 
     <target name="compile" depends="init">
         <mkdir dir="${build.classdir}"/>
-        <javac srcdir="${rope1401.srcdir}" destdir="${build.classdir}" debug="yes">
-        </javac>
+        <javac srcdir="${rope1401.srcdir}" destdir="${build.classdir}" debug="yes"/>
+        <copy file="${rope1401.srcdir}/rope1401/version" todir="${build.classdir}/rope1401"/>
     </target>
 
     <target name="package" depends="init">
@@ -30,15 +30,14 @@
 
     <target name="dist" depends="compile,package">
         <!-- Create the distribution directory -->
-        <mkdir dir="${build.distdir}/dist"/>
-
-        <!-- Put everything in ${build.classdir} into the jar file -->
-        <jar jarfile="${build.distdir}/rope1401.jar" basedir="${build.classdir}"
+        <mkdir dir="${build.distdir}"/>
+        <property file="${build.classdir}/rope1401/version" prefix="input"/>
+        <jar jarfile="${build.distdir}/rope1401-${input.rope_version}.jar" basedir="${build.classdir}"
              manifest="${rope1401.srcdir}/rope1401/manifest"/>
     </target>
 
     <target name="run" depends="dist">
-        <java fork="true" jar="${build.distdir}/rope1401.jar"/>
+        <java classpath="${build.classdir}" classname="rope1401.Rope"/>
     </target>
 
     <target name="javadoc" depends="init">

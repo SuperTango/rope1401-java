@@ -54,10 +54,11 @@ public class RopeFrame extends JFrame
         this.setSize(frameSize);
         this.setLocation((screenSize.width - frameSize.width) / 2, 10);
 
-        BufferedReader versionReader = new BufferedReader ( new InputStreamReader ( RopeFrame.class.getResourceAsStream ( "version" ) ) );
         String version;
         try { 
-            version = "-" + versionReader.readLine();
+//            InputStream is = RopeFrame.class.getResourceAsStream ( "version" );            
+            PropertyResourceBundle rb = new PropertyResourceBundle ( RopeFrame.class.getResourceAsStream ( "version" ) );
+            version = "-" + rb.getString ( "rope_version" );
         } catch ( IOException e ) {
             version = "";
         }
