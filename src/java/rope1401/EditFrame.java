@@ -356,7 +356,7 @@ public class EditFrame
         dialog.setVisible(true);
     }
 
-    private void assembleAction()
+    void assembleAction()
     {
         String line;
         messages = new Vector();

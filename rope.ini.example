@@ -32,6 +32,7 @@ autocoder.source=/home/altitude/rope1401/a/story.s
     #   GUI can be used to choose a macro directory or set of directories.
     #
 autocoder.macrodirs=/home/altitude/rope1401/b
+autocoder.assemble=1
 
     #
     # simulator.carddeck

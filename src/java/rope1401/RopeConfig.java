@@ -16,9 +16,10 @@ public class RopeConfig {
  
     RopeConfig() {
         m_defaultProperties = new Properties();
-        m_defaultProperties.setProperty ( "autocoder.binary.path", "./autocoder" );
-        m_defaultProperties.setProperty ( "simulator.binary.path", "./i1401r" );
+        m_defaultProperties.setProperty ( "autocoder.binary.path", "autocoder" );
+        m_defaultProperties.setProperty ( "simulator.binary.path", "i1401r" );
         m_defaultProperties.setProperty ( "rope.debug", "0" );
+        m_defaultProperties.setProperty ( "autocoder.assemble", "0" );
         m_properties = new Properties ( m_defaultProperties );
     }    
     
