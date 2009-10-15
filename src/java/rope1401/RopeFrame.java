@@ -105,6 +105,12 @@ public class RopeFrame extends JFrame
                 editFrame.setSourceFile ( file );
             }
         }
+//        String sim_cardDeck = RopeConfig.getConfig().getConfigValue ( "simulator.carddeck" );
+//        if ( sim_cardDeck != null ) {
+//            DataOptions.readerPath = sim_cardDeck;
+//            DataOptions.addUnitCommand ("at cdp " + sim_cardDeck );
+//
+//        }
     }
 
     void showExecWindow(String baseName)

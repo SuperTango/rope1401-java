@@ -1,6 +1,6 @@
 package rope1401;
 
-import java.util.ArrayList;
+import java.util.*;
 
 class DataOptions
 {
@@ -18,4 +18,22 @@ class DataOptions
     static String tape4Path;
     static String tape5Path;
     static String tape6Path;
+        
+    static void addUnitCommand ( String command ) {
+        if ( unitCommands == null ) {
+            unitCommands = new ArrayList();
+        }
+        unitCommands.add ( command );
+    }
+    
+    static void resetUnitCommands() {
+        unitCommands = new ArrayList();
+    }
+
+    static Iterator getUnitCommandsIterator () {
+        if ( unitCommands == null ) { 
+            unitCommands = new ArrayList();
+        }
+        return unitCommands.iterator();
+    }
 }

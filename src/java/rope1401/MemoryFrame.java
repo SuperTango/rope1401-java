@@ -112,7 +112,7 @@ public class MemoryFrame
         toLabel.setText("to");
         toText.setMinimumSize(new Dimension(45, 20));
         toText.setPreferredSize(new Dimension(45, 20));
-        toText.setText("399");
+        toText.setText("699");
         showButton.setText("Show");
         autoCheckBox.setSelected(true);
         autoCheckBox.setText("Auto update");

@@ -33,4 +33,17 @@ autocoder.source=/home/altitude/rope1401/a/story.s
     #
 autocoder.macrodirs=/home/altitude/rope1401/b
 
+    #
+    # simulator.carddeck
+    #   A card deck file that the simulator will use along with the 
+    #   compiled source code.  
+    #   This is not a required parameter, if it is not provided, the
+    #   GUI can be used to choose a card deck if required.
+    #
+simulator.carddeck=/home/altitude/rope1401/data2/aa_story.cd
 
+    #
+    # rope.debug
+    #   A debug flag.  This doesn't do much at the moment. 
+    #   Valid values are 1 or 0.
+rope.debug = 0

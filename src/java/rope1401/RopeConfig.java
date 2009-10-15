@@ -18,6 +18,7 @@ public class RopeConfig {
         m_defaultProperties = new Properties();
         m_defaultProperties.setProperty ( "autocoder.binary.path", "./autocoder" );
         m_defaultProperties.setProperty ( "simulator.binary.path", "./i1401r" );
+        m_defaultProperties.setProperty ( "rope.debug", "0" );
         m_properties = new Properties ( m_defaultProperties );
     }    
     
@@ -47,6 +48,10 @@ public class RopeConfig {
     
     public String toString() {
         return m_properties.toString ();
+    }
+    
+    public boolean isDebug() {
+        return m_properties.getProperty ( "rope.debug" ).equals ( "1" );
     }
     
 }

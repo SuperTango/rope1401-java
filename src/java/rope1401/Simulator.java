@@ -1,6 +1,7 @@
 package rope1401;
 
 import java.io.*;
+import java.util.Iterator;
 
 class Simulator
 {
@@ -56,10 +57,9 @@ class Simulator
             execute("at cdr " + DataOptions.inputPath);
             execute("at lpt " + DataOptions.outputPath);
 
-            if (DataOptions.unitCommands != null) {
-                for (int i = 0; i < DataOptions.unitCommands.size(); ++i) {
-                    execute((String) DataOptions.unitCommands.get(i));
-                }
+            Iterator i = DataOptions.getUnitCommandsIterator();
+            while ( i.hasNext() ) {
+                execute ( (String)i.next() );
             }
         }
     }
@@ -85,7 +85,9 @@ class Simulator
                 stdin.flush();
                 Thread.yield();
 
-//                System.out.println("sim> " + command);
+                if ( RopeConfig.getConfig ().isDebug() ) {
+                    System.out.println("sim> " + command);
+                }
             }
             catch (Exception ex) {
                 kill();

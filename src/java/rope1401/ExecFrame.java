@@ -300,6 +300,18 @@ public class ExecFrame
         }
         else {
             clearMessage();
+            dialog = new DataDialog(parent, "Runtime Data");
+            String sim_cardDeck = RopeConfig.getConfig().getConfigValue ( "simulator.carddeck" );
+            if ( sim_cardDeck != null ) {
+                DataOptions.readerPath = sim_cardDeck;
+                dialog.readerCheckBox.setSelected ( true );
+                File cardDeckFile = new File ( sim_cardDeck );
+                String[] ret = CardDeck.generateCardDeckFile ( cardDeckFile );
+                if ( ret[1] != null ) {
+                    writeMessage(ExecFrame.DARK_RED, "*** " + ret[1] );
+                }
+                DataOptions.inputPath = ret[0];
+            }
 
             if (simulatorRunning) {
                 killSimulator();
@@ -647,15 +659,15 @@ public class ExecFrame
 
     private void dataAction()
     {
-        if (dialog == null) {
-            dialog = new DataDialog(parent, "Runtime Data");
+//        if (dialog == null) {
+//            dialog = new DataDialog(parent, "Runtime Data");
 
             Dimension screenSize = Toolkit.getDefaultToolkit().
                                    getScreenSize();
             Dimension dialogSize = dialog.getSize();
             dialog.setLocation((screenSize.width - dialogSize.width) / 2,
                                (screenSize.height - dialogSize.height) / 2);
-        }
+//        }
 
         dialog.initialize();
         dialog.setVisible(true);

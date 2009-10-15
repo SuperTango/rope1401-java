@@ -385,9 +385,7 @@ public class DataDialog
         DataOptions.inputPath = readerCheckBox.isSelected()
                                 ? loadCardData()
                                 : AssemblerOptions.objectPath;
-
-        DataOptions.unitCommands = new ArrayList();
-
+                                
         return
             handleUnit("cdp", punchCheckBox, punchTextField) &&
             handleUnit("mt1", tape1CheckBox, tape1TextField) &&
@@ -398,63 +396,12 @@ public class DataDialog
             handleUnit("mt6", tape6CheckBox, tape6TextField);
     }
 
-    private String loadCardData()
-    {
-        if (cardDeckFile == null) {
-            if (DataOptions.readerPath.trim().length() > 0) {
-                cardDeckFile = new File(DataOptions.readerPath);
-            }
-            else {
-                return AssemblerOptions.objectPath;
-            }
+    private String loadCardData(){
+        String[] ret = CardDeck.generateCardDeckFile ( cardDeckFile );
+        if ( ret[1] != null ) {
+            parent.writeMessage(ExecFrame.DARK_RED, "*** " + ret[1] );
         }
-
-        File objectFile = new File(AssemblerOptions.objectPath);
-        String objectName = objectFile.getName();
-        String cardDeckName = cardDeckFile.getName();
-        String name1 = new String(objectName);
-        String name2 = new String(cardDeckName);
-
-        int index = name1.lastIndexOf(".");
-        if (index != -1) {
-            name1 = name1.substring(0, index);
-        }
-
-        index = name2.lastIndexOf(".");
-        if (index != -1) {
-            name2 = name2.substring(0, index);
-        }
-
-        String inputName = name1 + "_" + name2 + ".cd";
-        File inputFile = new File(DataOptions.directoryPath, inputName);
-        String inputPath = inputFile.getPath();
-
-        try {
-            BufferedReader objectReader =
-                new BufferedReader(new FileReader(objectFile));
-            BufferedReader cardDeckReader =
-                new BufferedReader(new FileReader(cardDeckFile));
-            PrintWriter inputWriter =
-                new PrintWriter(new FileWriter(inputFile));
-            String line;
-
-            while ((line = objectReader.readLine()) != null) {
-                inputWriter.println(line);
-            }
-            while ((line = cardDeckReader.readLine()) != null) {
-                inputWriter.println(line);
-            }
-
-            objectReader.close();
-            cardDeckReader.close();
-            inputWriter.close();
-        }
-        catch (Exception ex) {
-            parent.writeMessage(ExecFrame.DARK_RED,
-                                "*** " + ex.getMessage());
-        }
-
-        return inputPath;
+        return ret[0];
     }
 
     private boolean handleUnit(String unitName, JCheckBox checkBox, JTextField filePath)
@@ -462,7 +409,7 @@ public class DataDialog
         if (checkBox.isSelected()) {
             String path = filePath.getText().trim();
             if (path.length() > 0) {
-                DataOptions.unitCommands.add("at " + unitName + " " + path);
+                DataOptions.addUnitCommand ( "at " + unitName + " " + path );
                 return true;
             }
             else {
@@ -473,7 +420,7 @@ public class DataDialog
             }
         }
         else {
-            DataOptions.unitCommands.add("det " + unitName);
+            DataOptions.addUnitCommand ("det " + unitName);
             return true;
         }
     }
